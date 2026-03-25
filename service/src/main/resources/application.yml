@@ -35,3 +35,8 @@ jwt:
   secret: "clave_super_secreta_para_jwt"
   expiracion: 3600000
 
+stripe:
+  secret-key: sk_test_51Spcg7BgJyR1F4c1s8ZUjPDNNh41AF6R3p8e12ISqIplcFICwuBhm7RmgoVt9V3WjuG6rqiwlJsAinnhIHUEQ0Ca00jCCZlNMO
+  public-key: pk_test_51Spcg7BgJyR1F4c1nVXT7mqXGSISrxAvZFIf5NXwjFNd8ErbHh1pnsdM5qZ87ooMvGDGxlXQlj7U9iI03n0VQbTg00NZfFBkaS
+  webhook:
+    secret: whsec_30f15fd06b1ff463c307f57ebf7c3a769bfb71679dd94049dd018689fb0fec5d

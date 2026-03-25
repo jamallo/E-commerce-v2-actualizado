@@ -35,10 +35,10 @@ Jamallo es una plataforma de comercio electrónico con funcionalidades completas
 
 ### 📂 El repositorio está dividido en dos partes principales:
 
-ecommerce-v2-actualizado/
-├── ecommerce-web/ ← Frontend Angular
-├── service/ ← Backend Spring Boot
-└── README.md
+ecommerce-v2-actualizado/  
+├── ecommerce-web/ ← Frontend Angular  
+├── service/ ← Backend Spring Boot  
+└── README.md  
 
 
 --------------------------------------------------
@@ -79,16 +79,15 @@ ecommerce-v2-actualizado/
 Este repositorio está siendo actualizado desde versiones anteriores. Los cambios principales incluyen:
 
 ### Backend (Spring Boot)
-- [ ] Migración de `javax.*` a `jakarta.*`
-- [ ] Actualización de Spring Security (eliminación de `WebSecurityConfigurerAdapter`)
-- [ ] Configuración de JVM para Java 26 (`--add-opens` flags)
-- [ ] Verificación de compatibilidad de dependencias
+- [x] Migración de `javax.*` a `jakarta.*`
+- [x] Actualización de Spring Security (eliminación de `WebSecurityConfigurerAdapter`)
+- [x] Configuración de JVM para Java 26 (`--add-opens` flags)
+- [x] Verificación de compatibilidad de dependencias
 
 ### Frontend (Angular)
-- [ ] Actualización de Angular 17 → 21 (vía migración incremental)
-- [ ] Migración a Signals y zoneless change detection
-- [ ] Actualización de PrimeNG (si aplica) a versión compatible
-- [ ] Migración de Karma a Vitest
+- [x] Actualización de Angular 17 → 21 (vía migración incremental)
+- [x] Migración a Signals y zoneless change detection
+- [x] Migración de Karma a Vitest
 
 ### Base de datos
 - [x] Pendiente actualización PostgreSQL a versión 17+
@@ -179,3 +178,24 @@ Esto facilita la mantenibilidad y pruebas unitarias.
 ```bash
 cd service
 ./mvnw spring-boot:run
+
+## 🚀 Estado actual del proyecto
+
+**✅ MIGRACIÓN COMPLETADA (marzo 2026)**
+
+| Componente | Versión |
+|------------|--------|
+| Java | 26 |
+| Spring Boot | 4.0.1 |
+| PostgreSQL | 18 |
+| Angular | 21 |
+| Angular Material | 21 |
+| Node.js | 24.14 |
+
+### 📝 Notas de la migración
+
+- JDK actualizado de 25 a 26
+- Spring Boot actualizado de 4.0.0 a 4.0.1
+- Angular ya estaba en versión 21 (no requirió migración)
+- pgAdmin actualizado de 9.11 a 9.13
+- PostgreSQL actualizado a versión 18
