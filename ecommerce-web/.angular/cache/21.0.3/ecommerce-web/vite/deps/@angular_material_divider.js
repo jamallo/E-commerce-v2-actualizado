@@ -2,10 +2,10 @@ import {
   coerceBooleanProperty
 } from "./chunk-42QFQP6S.js";
 import "./chunk-N4DOILP3.js";
-import "./chunk-FFO6V5PX.js";
 import {
   BidiModule
 } from "./chunk-KAEUXLSX.js";
+import "./chunk-FFO6V5PX.js";
 import {
   ChangeDetectionStrategy,
   Component,
