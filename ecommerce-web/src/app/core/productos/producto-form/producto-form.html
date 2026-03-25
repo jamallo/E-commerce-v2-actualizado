@@ -1,0 +1,53 @@
+<h2>{{ modoEdicion  ? 'Editar producto' : 'Nuevo producto' }}</h2>
+
+<form [formGroup]="form" (ngSubmit)="guardar()">
+
+  <label>
+    Nombre:
+    <input type="text" formControlName="nombre"/>
+  </label>
+
+  <br><br>
+
+  <label>
+    Descripción:
+    <textarea formControlName="descripcion"></textarea>
+  </label>
+
+  <br><br>
+
+  <label>
+    Precio:
+    <input type="number" formControlName="precio" required/>
+  </label>
+
+  <br><br>
+
+  <label>
+    Activo:
+    <input type="checkbox" formControlName="activo"/>
+  </label>
+
+  <!-- <label>
+    URL de la imagen:
+    <input type="text" formControlName="imagenUrl"/>
+  </label> -->
+
+  <label>
+    Imagen del Producto
+    <input type="file" (change)="onImagenSeleccionada($event)" />
+  </label>
+
+  <br><br>
+
+  <button type="submit" [disabled]="cargando">
+    {{ cargando ? 'Guardando...' : 'Guardar'}}
+  </button>
+
+</form>
+@if (mensaje) {
+  <p style="color: green; font-weight: bold">{{ mensaje }}</p>
+}
+@if (error) {
+  <p style="color: red"> {{ error }} </p>
+}

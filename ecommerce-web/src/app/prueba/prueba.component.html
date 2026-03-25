@@ -1,0 +1,11 @@
+<h2> Zona protegida </h2>
+<button (click) = "probar()">Probar endpoint protegido</button>
+
+@if (mensaje) {
+  <p style="color: green">{{ mensaje }}</p>
+}
+
+@if (error) {
+  <p style="color: red">{{ error }};
+  </p>
+}

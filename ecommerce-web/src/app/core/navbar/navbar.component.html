@@ -1,0 +1,94 @@
+<mat-toolbar class="navbar-toolbar" color="primary">
+  <!-- Logo/Brand -->
+  <div class="brand-section" routerLink="/productos">
+    <!-- <img src="assets/logo.svg" class="brand-logo" /> -->
+    <mat-icon class="brand-icon">workspace_premium</mat-icon>
+    <span class="brand-text">Jamallo</span>
+  </div>
+
+  <!-- Espacio flexible -->
+  <span class="spacer"></span>
+
+  @if (isLogged) {
+    <!-- Navegación principal -->
+    <nav class="nav-links">
+      <a mat-button routerLink="/productos" routerLinkActive="active-link">
+        <mat-icon>store</mat-icon>
+        Productos
+      </a>
+
+      <a mat-button routerLink="/perfil" routerLinkActive="active-link">
+        <mat-icon>person</mat-icon>
+        Perfil
+      </a>
+
+      <a *appHasRole="['ADMIN']" mat-button routerLink="/productos/nuevo" routerLinkActive="active-link">
+        <mat-icon>add_circle</mat-icon>
+        Nuevo Producto
+      </a>
+    </nav>
+
+    <span class="spacer"></span>
+
+    <!-- Iconos de acción -->
+    <div class="action-icons">
+      <!-- Carrito con badge -->
+      <button mat-icon-button [matBadge]="totalCesta"
+              [matBadgeHidden]="totalCesta === 0"
+              matBadgeColor="warn"
+              routerLink="/cesta"
+              class="cart-button">
+        <mat-icon>shopping_cart</mat-icon>
+      </button>
+
+      <!-- Menú de usuario -->
+      <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
+        <div class="user-avatar">
+          {{ getUserInitials() }}
+        </div>
+      </button>
+
+      <mat-menu #userMenu="matMenu" xPosition="before">
+        <div class="user-menu-header">
+          <div class="user-avatar large">{{ getUserInitials() }}</div>
+          <div class="user-info">
+            <span class="user-email">{{ userEmail || 'Usuario' }}</span>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item routerLink="/perfil" class="perfil-button">
+          <mat-icon>person</mat-icon>
+          <span>Mi Perfil</span>
+        </button>
+
+        <button *appHasRole="['ADMIN']" mat-menu-item routerLink="/admin">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span>Panel Admin</span>
+        </button>
+
+        @if (isAdmin()) {
+          <button mat-menu-item routerLink="/prueba">
+            <mat-icon>developer_mode</mat-icon>
+            <span>Prueba</span>
+          </button>
+        }
+
+        <mat-divider></mat-divider>
+
+        <button mat-menu-item (click)="logout()" class="logout-button">
+          <mat-icon>logout</mat-icon>
+          <span>Cerrar Sesión</span>
+        </button>
+      </mat-menu>
+    </div>
+
+  } @else {
+    <!-- Estado no logueado -->
+    <button mat-raised-button color="accent" (click)="goLogin()" class="login-button">
+      <mat-icon>login</mat-icon>
+      Iniciar Sesión
+    </button>
+  }
+</mat-toolbar>

@@ -1,0 +1,410 @@
+
+/* ===========================
+   CONTENEDOR PRINCIPAL
+=========================== */
+
+.checkout-card {
+  max-width: 480px;
+  margin: 24px auto;
+  padding: 24px 24px 96px;
+  border-radius: 20px;
+
+  background: linear-gradient(
+    180deg,
+    var(--fondo),
+    var(--fondo-suave)
+  );
+
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* ===========================
+   TÍTULOS
+=========================== */
+
+h1 {
+  text-align: center;
+  margin-bottom: 16px;
+  font-weight: 600;
+  color: var(--texto);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: var(--verde);
+}
+
+/* ===========================
+   FORMULARIO
+=========================== */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+/* Check verde cuando es válido */
+mat-icon {
+  color: var(--verde);
+}
+
+/* Campos con transición suave */
+mat-form-field {
+  transition: transform 0.15s ease;
+
+  &:focus-within {
+    transform: translateY(-1px);
+  }
+}
+
+/* ===========================
+   BOTONES
+=========================== */
+
+button {
+  width: 100%;
+  margin-top: 20px;
+  height: 48px;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 999px;
+}
+
+button[disabled] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.btn-pago {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  mat-spinner {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .texto-cargando {
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.spinner-pago {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.btn-pago[disabled] {
+  opacity: 0.8;
+}
+
+/* ===========================
+   CONFIRMACIÓN
+=========================== */
+
+.confirmacion {
+  animation: aparecer 0.4s ease-out;
+
+  h2 {
+    margin-bottom: 24px;
+  }
+
+  .bloque {
+    margin: 20px 0;
+  }
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+
+    mat-icon {
+      color: var(--verde);
+    }
+  }
+
+  .texto {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--texto-mudo);
+  }
+
+  /* ===========================
+     PRODUCTOS
+  =========================== */
+
+  .producto {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    font-size: 14px;
+
+    .cantidad {
+      color: var(--texto-mudo);
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+
+      .nombre {
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .precio {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--texto-mudo);
+      }
+    }
+
+    .acciones {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      button {
+        width: 36px;
+        height: 36px;
+      }
+
+      .cantidad {
+        min-width: 24px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      mat-icon {
+        font-size: 20px;
+      }
+    }
+  }
+
+
+
+  /* ===========================
+     TOTAL
+  =========================== */
+
+  .total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 12px 0;
+
+    .precio {
+      color: var(--oro);
+    }
+  }
+
+
+
+  /* ===========================
+     PAGO
+  =========================== */
+
+  .pago {
+    text-align: center;
+  }
+
+  .stripe-box {
+    padding: 14px;
+    border-radius: 12px;
+    margin: 16px 0;
+
+    background:
+      linear-gradient(
+        180deg,
+        var(--fondo),
+        var(--fondo-suave)
+      );
+
+    border: 1px solid var(--borde);
+  }
+
+  .btn-pago {
+    margin-top: 12px;
+    height: 52px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+}
+
+/* ===========================
+   RESUMEN
+=========================== */
+
+.resumen-vivo {
+  margin-top: 24px;
+  padding: 16px;
+  border-radius: 12px;
+
+  background: linear-gradient(
+    135deg,
+    var(--verde-suave),
+    var(--oro-suave)
+
+  );
+  border: 1px solid var(--borde);
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  animation: aparecer 200ms ease-out;
+
+  h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    color: var(--verde);
+  }
+
+  p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: var(--texto);
+  }
+
+  .telefono {
+    margin-top: 8px;
+    font-weight: 500;
+    color: var(--verde);
+  }
+}
+
+
+/* ===========================
+   ANIMACIONES
+=========================== */
+
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*==========================
+    BARRA INFERIOR DE RESUMEN RÁPIDO
+===========================*/
+
+.sticky-resumen {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+
+  padding: 12px 16px;
+  background: linear-gradient(
+    135deg,
+    var(--verde-suave),
+    var(--oro-suave)
+  );
+  border-top: 1px solid var(--borde);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+
+  z-index: 1000;
+
+  .info {
+    display: flex;
+    flex-direction: column;
+
+    .label {
+      font-size: 12px;
+      color: var(--texto-mudo);
+    }
+
+    .precio {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--verde);
+    }
+  }
+
+  button {
+    min-width: 140px;
+    height: 48px;
+    font-weight: 600;
+    background-color: var(--oro);
+  }
+}
+
+@media (min-width: 768px) {
+  .sticky-resumen {
+    position: static;
+    box-shadow: none;
+    border-top: none;
+    padding: 16px 0;
+  }
+
+}
+
+/*========================
+  ANIMACIÓN PRECIO TOTAL
+=========================*/
+
+.precio.animar {
+    animation: pulso-precio 500ms ease-out;
+  }
+
+  @keyframes pulso-precio {
+    0% {
+      transform: scale(1);
+      color: var(--verde);
+    }
+
+    50% {
+      transform: scale(1.12);
+      color: var(--oro);
+    }
+
+    100% {
+      transform: scale(1);
+      color: var(--verde);
+    }
+  }
+
+  .snack-ok {
+    background: var(--verde);
+    color: white;
+  }
+
+  .snack-warn {
+    background: var(--oro);
+    color: #2a2a2a;
+  }
+
+  .snack-error {
+    background: #c62828;
+    color: white;
+  }

@@ -1,0 +1,217 @@
+@use 'sass:color';
+
+// Variables
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 24px;
+
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+
+// Colores
+$success-color: #2e7d32;
+$error-color: #c62828;
+$info-color: #1565c0;
+$warning-color: #ed6c02;
+
+// Mixins responsive
+@mixin tablet {
+  @media (min-width: #{$breakpoint-sm}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-md}) {
+    @content;
+  }
+}
+
+// Animaciones
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+// Contenedor de notificaciones
+.notification-container {
+  position: fixed;
+  top: calc(var(--navbar-height) + 16px);
+  right: 24px;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  pointer-events: none;
+  max-width: 380px;
+  width: calc(100% - 48px);
+
+  @media (max-width: 768px) {
+    top: calc(var(--navbar-height-mobile) + 8px);
+    right: 16px;
+    width: calc(100% - 32px);
+    left: 16px;
+    max-width: none;
+  }
+
+  // Cuando el navbar está oculto, ajustar posición
+  body.navbar-hidden & {
+    top: 16px;
+
+    @media (max-width: 768px) {
+      top: 8px;
+    }
+  }
+}
+
+// Notificación individual
+:host {
+  display: block;
+  width: 100%;
+  pointer-events: all;
+  animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &.closing {
+    animation: slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+}
+
+.notification {
+  position: relative;
+  width: 100%;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $border-radius-lg;
+  color: var(--oro);
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(8px);
+  border-left: 4px solid rgba(255, 255, 255, 0.5);
+
+  @include tablet {
+    padding: $spacing-md $spacing-xl;
+  }
+
+  // Icono según tipo
+  &::before {
+    font-family: 'Material Icons';
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  // Tipos de notificación
+  &.success {
+    background-color: var(--correcto, $success-color);
+    &::before { content: 'check_circle'; }
+  }
+
+  &.error {
+    background-color: var(--error, $error-color);
+    &::before { content: 'error'; }
+  }
+
+  &.info {
+    background-color: var(--info, $info-color);
+    &::before { content: 'info'; }
+  }
+
+  &.warning {
+    background-color: $warning-color;
+    &::before { content: 'warning'; }
+  }
+
+  .message {
+    flex: 1;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.4;
+    word-break: break-word;
+
+    @include tablet {
+      font-size: 1rem;
+    }
+  }
+
+  .close-btn {
+    background: none;
+    border: none;
+    color: var(--oro);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: $spacing-xs;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $border-radius-sm;
+    min-width: 32px;
+    min-height: 32px;
+    transition: all 0.2s ease;
+    opacity: 0.9;
+
+    &:hover {
+      opacity: 1;
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &::before {
+      content: '✕';
+      font-size: 1.1rem;
+    }
+  }
+
+  // Barra de progreso
+  .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 0 0 0 $border-radius-lg;
+    animation: progress 3s linear forwards;
+  }
+}
+
+@keyframes progress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+// Reducir movimiento
+@media (prefers-reduced-motion: reduce) {
+  :host,
+  .notification,
+  .close-btn,
+  .progress-bar {
+    animation: none !important;
+    transition: none !important;
+  }
+}

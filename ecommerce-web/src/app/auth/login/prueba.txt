@@ -1,0 +1,9 @@
+{
+  "email": "alba@test.com",
+  "contrasenia": "Password1"
+}
+
+admin@test.com
+$2a$10$6Wk3hHqCmC8TnUKBzKwHuOjDlCPDmQhfTOGcnu/HvD0AkTSrHUcUS
+
+Token 26/12/25: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbGVzIjpbIkFETUlOIl0sImlhdCI6MTc2NjkzMzMxNywiZXhwIjoxNzY2OTM2OTE3fQ.wmcYt9zwmSkkm2x-wbn29cS0KLMkxnLz88B9DuG5Nf2XDf8vKAo2DzK1w8bJfP4QjEgAKb6gGAzEGBMd5bME6w

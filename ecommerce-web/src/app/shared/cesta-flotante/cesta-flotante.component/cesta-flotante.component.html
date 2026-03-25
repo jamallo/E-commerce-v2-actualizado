@@ -1,0 +1,20 @@
+<button
+  id="cesta-flotante"
+  mat-fab
+  color="primary"
+  class="cesta-flotante"
+  [class.animar]="animar"
+  (click)="toggleMiniCesta()"
+  matBadge="{{ totalItems }}"
+  matBadgeColor="warn"
+  matBadgeHidden="{{ totalItems === 0}}"
+  aria-label="Abrir cesta"
+>
+
+  <mat-icon>shopping_cart</mat-icon>
+</button>
+
+@if (mostrarMiniCesta) {
+  <app-mini-cesta (cerrar)="mostrarMiniCesta = false" />
+
+}

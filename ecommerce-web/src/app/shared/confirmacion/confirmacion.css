@@ -1,0 +1,29 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 16px;
+  width: 90%;
+  max-width: 320px;
+  border-radius: 8px;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.confirmar {
+  background: red;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+}

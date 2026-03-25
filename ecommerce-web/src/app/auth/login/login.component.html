@@ -1,0 +1,269 @@
+<div class="login-container">
+  <div class="login-card">
+    <!-- Header con icono -->
+    <div class="card-header">
+      <div class="icono">
+        <span class="material-icons">store</span>
+      </div>
+      <h2>Jamallo</h2>
+      <p>{{ modo === 'login' ? 'Bienvenido de nuevo' : 'Crea tu cuenta' }}</p>
+    </div>
+
+    <!-- Tabs para cambiar entre login/registro -->
+    <div class="auth-tabs">
+      <button
+        class="tab"
+        [class.active]="modo === 'login'"
+        (click)="cambiarModo('login')">
+        Iniciar sesión
+      </button>
+      <button
+        class="tab"
+        [class.active]="modo === 'registro'"
+        (click)="cambiarModo('registro')">
+        Registrarse
+      </button>
+    </div>
+
+    <!-- FORMULARIO DE LOGIN -->
+    @if (modo === 'login') {
+      <form (ngSubmit)="login()" class="form-content" #loginForm="ngForm">
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrapper">
+            <span class="material-icons">email</span>
+            <input
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              required
+              email
+              #emailField="ngModel"
+              placeholder="tu@email.com"
+              [class.error]="emailField.invalid && emailField.touched"
+            />
+          </div>
+          @if (emailField.invalid && emailField.touched) {
+            <div class="validation-error">
+              @if (emailField.errors?.['required']) {
+                <span>El email es obligatorio</span>
+              }
+              @if (emailField.errors?.['email']) {
+                <span>Introduce un email válido</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Contraseña</label>
+          <div class="input-wrapper">
+            <span class="material-icons">lock</span>
+            <input
+              type="password"
+              [(ngModel)]="contrasenia"
+              name="contrasenia"
+              required
+              minlength="6"
+              #passwordField="ngModel"
+              placeholder="••••••"
+              [class.error]="passwordField.invalid && passwordField.touched"
+            />
+          </div>
+          @if (passwordField.invalid && passwordField.touched) {
+            <div class="validation-error">
+              @if (passwordField.errors?.['required']) {
+                <span>La contraseña es obligatoria</span>
+              }
+              @if (passwordField.errors?.['minlength']) {
+                <span>Mínimo 6 caracteres</span>
+              }
+            </div>
+          }
+        </div>
+
+        <button
+          type="submit"
+          class="btn-submit"
+          [class.loading]="cargando"
+          [disabled]="loginForm.invalid || cargando">
+          <span class="btn-text">Entrar</span>
+          <span class="spinner"></span>
+        </button>
+
+        @if (error) {
+          <div class="error-message">
+            <span class="material-icons">error</span>
+            {{ error }}
+          </div>
+        }
+
+        <!-- Enlace para recuperar contraseña (opcional) -->
+        <div class="forgot-password">
+          <a href="#" (click)="$event.preventDefault()">¿Olvidaste tu contraseña?</a>
+        </div>
+      </form>
+    }
+
+    <!-- FORMULARIO DE REGISTRO -->
+    @if (modo === 'registro') {
+      <form (ngSubmit)="registro()" class="form-content" #registroNgForm="ngForm">
+
+        @if (registroExitoso) {
+          <div class="success-message">
+            <span class="material-icons">check_circle</span>
+            ¡Registro exitoso! Redirigiendo...
+          </div>
+        }
+
+        <div class="form-group">
+          <label>Email</label>
+          <div class="input-wrapper">
+            <span class="material-icons">email</span>
+            <input
+              type="email"
+              [(ngModel)]="registroData.email"
+              name="emailReg"
+              required
+              email
+              #emailRegField="ngModel"
+              placeholder="tu@email.com"
+              [class.error]="emailRegField.invalid && emailRegField.touched"
+            />
+          </div>
+          @if (emailRegField.invalid && emailRegField.touched) {
+            <div class="validation-error">
+              @if (emailRegField.errors?.['required']) {
+                <span>El email es obligatorio</span>
+              }
+              @if (emailRegField.errors?.['email']) {
+                <span>Introduce un email válido</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Contraseña</label>
+          <div class="input-wrapper">
+            <span class="material-icons">lock</span>
+            <input
+              type="password"
+              [(ngModel)]="registroData.contrasenia"
+              name="contraseniaReg"
+              required
+              minlength="6"
+              #contraseniaRegField="ngModel"
+              placeholder="•••••• (mínimo 6 caracteres)"
+              [class.error]="contraseniaRegField.invalid && contraseniaRegField.touched"
+            />
+          </div>
+          @if (contraseniaRegField.invalid && contraseniaRegField.touched) {
+            <div class="validation-error">
+              @if (contraseniaRegField.errors?.['required']) {
+                <span>La contraseña es obligatoria</span>
+              }
+              @if (contraseniaRegField.errors?.['minlength']) {
+                <span>Mínimo 6 caracteres</span>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label>Confirmar contraseña</label>
+          <div class="input-wrapper">
+            <span class="material-icons">lock</span>
+            <input
+              type="password"
+              [(ngModel)]="registroData.confirmarContrasenia"
+              name="confirmarContrasenia"
+              required
+              #confirmarField="ngModel"
+              placeholder="••••••"
+              [class.error]="(confirmarField.touched && !passwordsCoinciden()) || (confirmarField.invalid && confirmarField.touched)"
+            />
+          </div>
+          @if (confirmarField.touched && !passwordsCoinciden()) {
+            <div class="validation-error">
+              Las contraseñas no coinciden
+            </div>
+          }
+        </div>
+
+        <div class="terms-checkbox">
+          <input
+            type="checkbox"
+            id="terminos"
+            [(ngModel)]="registroData.aceptaTerminos"
+            name="terminos"
+            required
+            #terminosField="ngModel">
+          <label for="terminos">
+            Acepto los <a href="#" (click)="$event.preventDefault()">términos y condiciones</a>
+          </label>
+          @if (terminosField.invalid && terminosField.touched) {
+            <div class="validation-error checkbox-error">
+              Debes aceptar los términos
+            </div>
+          }
+        </div>
+
+        <button
+          type="submit"
+          class="btn-submit"
+          [class.loading]="cargando"
+          [disabled]="!registroFormValido() || cargando">
+          <span class="btn-text">Crear cuenta</span>
+          <span class="spinner"></span>
+        </button>
+
+        @if (errorRegistro) {
+          <div class="error-message">
+            <span class="material-icons">error</span>
+            {{ errorRegistro }}
+          </div>
+        }
+
+        <!-- Indicador de seguridad de contraseña (opcional) -->
+        @if (registroData.contrasenia && registroData.contrasenia.length > 0) {
+          <div class="password-strength">
+            <div class="strength-bar">
+              <div
+                class="strength-fill"
+                [style.width.%]="registroData.contrasenia.length >= 6 ? 100 : (registroData.contrasenia.length * 16.67)"
+                [class.weak]="registroData.contrasenia.length < 6"
+                [class.medium]="registroData.contrasenia.length >= 6 && registroData.contrasenia.length < 8"
+                [class.strong]="registroData.contrasenia.length >= 8">
+              </div>
+            </div>
+            <span class="strength-text">
+              @if (registroData.contrasenia.length < 6) {
+                Débil
+              } @else if (registroData.contrasenia.length < 8) {
+                Media
+              } @else {
+                Fuerte
+              }
+            </span>
+          </div>
+        }
+      </form>
+    }
+
+    <!-- Enlace para cambiar entre login/registro -->
+    <div class="auth-switch">
+      @if (modo === 'login') {
+        <span>¿No tienes cuenta? </span>
+        <button (click)="cambiarModo('registro')" class="switch-button">
+          Regístrate
+        </button>
+      } @else {
+        <span>¿Ya tienes cuenta? </span>
+        <button (click)="cambiarModo('login')" class="switch-button">
+          Inicia sesión
+        </button>
+      }
+    </div>
+  </div>
+</div>

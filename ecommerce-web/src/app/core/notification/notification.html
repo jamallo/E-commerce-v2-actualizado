@@ -1,0 +1,22 @@
+@if (notification) {
+  <div
+    class="notification"
+    [class]="notification.type"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()"
+    (touchstart)="onTouchStart()"
+    (touchend)="onTouchEnd()"
+    (touchcancel)="onTouchCancel()"
+    (click)="isMobile ? cerrar() : null">
+
+    <span class="message">{{ notification.message }}</span>
+
+    <button class="close-btn" (click)="cerrar()" aria-label="Cerrar notificación">
+      <span class="material-icons">close</span>
+    </button>
+
+    @if (autoClose) {
+      <div class="progress-bar" [style.animation-duration]="autoCloseTime + 'ms'"></div>
+    }
+  </div>
+}

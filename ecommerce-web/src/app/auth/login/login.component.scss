@@ -1,0 +1,377 @@
+@use 'sass:color';
+
+// Variables
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+
+$border-radius-sm: 8px;
+$border-radius-md: 12px;
+$border-radius-lg: 16px;
+$border-radius-xl: 24px;
+
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+
+// Mixins responsive
+@mixin tablet {
+  @media (min-width: #{$breakpoint-sm}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$breakpoint-md}) {
+    @content;
+  }
+}
+
+// Animaciones
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+// Contenedor principal
+:host {
+  display: block;
+  min-height: calc(100vh - var(--navbar-height-mobile));
+  background: linear-gradient(135deg, var(--fondo-suave) 0%, var(--fondo) 100%);
+
+  @include desktop {
+    min-height: calc(100vh - var(--navbar-height));
+  }
+}
+
+// Contenedor del formulario
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+  padding: $spacing-lg;
+  animation: fadeIn 0.5s ease-out;
+}
+
+// Tarjeta de login
+.login-card {
+  width: 100%;
+  max-width: 400px;
+  background-color: var(--fondo);
+  border-radius: $border-radius-xl;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  animation: slideIn 0.4s ease-out;
+
+  @include tablet {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Header de la tarjeta
+.card-header {
+  padding: $spacing-xl $spacing-lg;
+  text-align: center;
+  background: linear-gradient(135deg, var(--verde) 0%, color.scale(#1b5e20, $lightness: -10%) 100%);
+  color: var(--oro);
+
+  .icono {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto $spacing-md;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .material-icons {
+      font-size: 48px;
+      color: var(--oro);
+    }
+  }
+
+  h2 {
+    margin: 0 0 $spacing-xs;
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+  }
+
+  p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.95rem;
+  }
+}
+
+// Tabs de login/registro
+.auth-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--borde);
+
+  .tab {
+    flex: 1;
+    padding: $spacing-md;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--texto-mudo);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &.active {
+      color: var(--verde);
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background-color: var(--verde);
+        animation: slideIn 0.2s ease-out;
+      }
+    }
+
+    &:hover:not(.active) {
+      color: var(--texto);
+      background-color: var(--fondo-suave);
+    }
+  }
+}
+
+// Contenido del formulario
+.form-content {
+  padding: $spacing-xl $spacing-lg;
+}
+
+// Grupo de formulario
+.form-group {
+  margin-bottom: $spacing-lg;
+
+  label {
+    display: block;
+    margin-bottom: $spacing-xs;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--texto-mudo);
+  }
+
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .material-icons {
+      position: absolute;
+      left: $spacing-sm;
+      color: var(--texto-mudo);
+      font-size: 20px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: $spacing-sm $spacing-sm $spacing-sm 40px;
+      border: 1px solid var(--borde);
+      border-radius: $border-radius-md;
+      font-size: 1rem;
+      transition: all 0.2s ease;
+      background-color: var(--fondo);
+
+      &:focus {
+        outline: none;
+        border-color: var(--verde);
+        box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.1);
+      }
+
+      &.ng-invalid.ng-touched {
+        border-color: var(--error);
+      }
+
+      &::placeholder {
+        color: #aaa;
+      }
+    }
+
+    select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right $spacing-sm center;
+      background-size: 16px;
+    }
+  }
+
+  // Validación
+  .validation-error {
+    margin-top: $spacing-xs;
+    font-size: 0.8rem;
+    color: var(--error);
+    animation: fadeIn 0.2s ease-out;
+  }
+}
+
+// Doble columna para nombre/apellido
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+}
+
+// Checkbox términos
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+
+  input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--verde);
+  }
+
+  label {
+    font-size: 0.85rem;
+    color: var(--texto-mudo);
+
+    a {
+      color: var(--verde);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Botón de submit
+.btn-submit {
+  width: 100%;
+  padding: $spacing-md;
+  background-color: var(--verde);
+  color: var(--oro);
+  border: none;
+  border-radius: $border-radius-md;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  box-shadow: 0 4px 12px rgba(27, 94, 32, 0.2);
+
+  &:hover:not(:disabled) {
+    background-color: color.scale(#1b5e20, $lightness: -10%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(27, 94, 32, 0.3);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &.loading {
+    position: relative;
+    color: transparent;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 20px;
+      height: 20px;
+      border: 2px solid white;
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+  }
+}
+
+// Mensaje de error
+.error-message {
+  margin-top: $spacing-lg;
+  padding: $spacing-sm $spacing-md;
+  background-color: rgba(198, 40, 40, 0.1);
+  color: var(--error);
+  border-radius: $border-radius-md;
+  font-size: 0.9rem;
+  text-align: center;
+  animation: shake 0.4s ease-out;
+}
+
+// Enlace para alternar entre login/registro
+.auth-switch {
+  margin-top: $spacing-lg;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--texto-mudo);
+
+  button {
+    background: none;
+    border: none;
+    color: var(--verde);
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+
+    &:hover {
+      color: color.scale(#1b5e20, $lightness: -10%);
+    }
+  }
+}
+
+// Spinner animation
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+// Mejoras de accesibilidad
+@media (prefers-reduced-motion: reduce) {
+  .login-card,
+  .btn-submit,
+  .error-message {
+    animation: none;
+    transition: none;
+  }
+}

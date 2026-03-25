@@ -1,0 +1,50 @@
+
+<div class="mini-cesta-backdrop" (click)="cerrar.emit()"></div>
+
+<div class="mini-cesta-panel">
+  <header class="mini-cesta-header">
+    <h3>Tu cesta</h3>
+
+    <button mat-icon-button (click)="cerrar.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <section class="mini-cesta-content">
+    <!-- aquí van los productos -->
+    <ng-content></ng-content>
+  </section>
+
+  <footer class="mini-cesta-footer">
+    <button mat-raised-button color="primary" class="full-width">
+      Ir a pagar
+    </button>
+  </footer>
+</div>
+
+<!-- <div class="overlay" (click)="cerrarPanel()"></div>
+
+<div class="panel">
+  <h4>Tu cesta</h4>
+
+  @if (items.length === 0) {
+    <p>La cesta está vacía</p>
+  } @else {
+
+    @for (item of items; track item.product.id) {
+      <div class="item">
+        <span>{{ item.product.nombre }}</span>
+        <span>{{ item.quantity }}</span>
+      </div>
+    }
+
+    <hr>
+
+    <p class="total">Total: <strong>{{ total }}€</strong></p>
+
+    <a routerLink = "/cesta" (click)="cerrarPanel()">Ver cesta</a>
+    <br>
+    <br>
+    <a routerLink = "/checkout" (click)="cerrarPanel()">Finalizar compra</a>
+  }
+</div> -->

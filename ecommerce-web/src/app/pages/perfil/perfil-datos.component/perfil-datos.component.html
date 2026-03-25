@@ -1,0 +1,356 @@
+<div class="perfil-container">
+
+  <!-- Cabecera con gradiente y sombra -->
+  <div class="profile-header">
+    <div class="header-content">
+      <div class="avatar-section">
+        <div class="avatar">
+          {{ getUserInitials() }}
+        </div>
+        @if (tieneDireccionPrincipal) {
+          <div class="avatar-badge" matTooltip="Perfil completo">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+        }
+      </div>
+      <div class="user-info">
+        <h1>{{ perfilData.nombre || 'Usuario' }} {{ perfilData.apellidos || '' }}</h1>
+        <p class="user-email">
+          <mat-icon>email</mat-icon>
+          {{ perfilData.email }}
+        </p>
+        @if (tieneDireccionPrincipal) {
+          <p class="user-status">
+            <mat-icon class="verified">verified</mat-icon>
+            Dirección principal configurada
+          </p>
+        } @else {
+          <p class="user-status warning">
+            <mat-icon>warning</mat-icon>
+            Sin dirección principal
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Cargando tu perfil...</p>
+    </div>
+  } @else {
+    <!-- Pestañas con diseño mejorado -->
+    <mat-tab-group class="profile-tabs" animationDuration="300ms" mat-stretch-tabs="false">
+
+      <!-- Pestaña: Datos personales -->
+      <mat-tab label="Datos personales">
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <mat-card class="form-card glass-effect">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon class="title-icon">person</mat-icon>
+                  Información personal
+                </mat-card-title>
+                @if (!editMode && tieneDireccionPrincipal) {
+                  <button mat-button color="primary" (click)="activarEdicion()" class="edit-button">
+                    <mat-icon>edit</mat-icon>
+                    <span>Editar</span>
+                  </button>
+                }
+                @if (!tieneDireccionPrincipal) {
+                  <button mat-button color="primary" routerLink="/perfil/direcciones" class="edit-button">
+                    <mat-icon>add_location</mat-icon>
+                    <span>Configurar dirección</span>
+                  </button>
+                }
+              </mat-card-header>
+
+              <mat-divider></mat-divider>
+
+              <mat-card-content>
+                @if (!tieneDireccionPrincipal) {
+                  <div class="warning-container">
+                    <mat-icon color="warn">info</mat-icon>
+                    <div class="warning-text">
+                      <strong>No tienes una dirección principal</strong>
+                      <p>Configura una dirección principal para poder gestionar tu perfil y realizar compras.</p>
+                    </div>
+                  </div>
+                }
+
+                <form [formGroup]="datosForm" class="profile-form">
+                  <!-- Fila: Nombre y Apellidos -->
+                  <div class="form-row">
+                    <mat-form-field appearance="outline" class="form-field">
+                      <mat-label>Nombre</mat-label>
+                      <input matInput formControlName="nombre" [readonly]="!editMode">
+                      <mat-icon matPrefix>badge</mat-icon>
+                      @if (nombreControl?.touched && nombreControl?.errors) {
+                        <mat-error>
+                          @if (nombreControl?.errors?.['required']) {
+                            El nombre es obligatorio
+                          }
+                          @if (nombreControl?.errors?.['minlength']) {
+                            Mínimo 2 caracteres
+                          }
+                        </mat-error>
+                      }
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="form-field">
+                      <mat-label>Apellidos</mat-label>
+                      <input matInput formControlName="apellidos" [readonly]="!editMode">
+                      <mat-icon matPrefix>badge</mat-icon>
+                      @if (apellidosControl?.touched && apellidosControl?.errors) {
+                        <mat-error>
+                          @if (apellidosControl?.errors?.['required']) {
+                            Los apellidos son obligatorios
+                          }
+                          @if (apellidosControl?.errors?.['minlength']) {
+                            Mínimo 2 caracteres
+                          }
+                        </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Email (solo lectura) -->
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" readonly>
+                    <mat-icon matPrefix>email</mat-icon>
+                  </mat-form-field>
+
+                  <!-- Teléfono -->
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Teléfono</mat-label>
+                    <input matInput formControlName="telefono" [readonly]="!editMode" placeholder="+34 600 000 000">
+                    <mat-icon matPrefix>phone</mat-icon>
+                    @if (telefonoControl?.touched && telefonoControl?.errors) {
+                      <mat-error>
+                        Formato de teléfono inválido
+                      </mat-error>
+                    }
+                  </mat-form-field>
+
+                  <!-- Dirección -->
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Dirección</mat-label>
+                    <input matInput formControlName="direccion" [readonly]="!editMode" placeholder="Calle, número, piso">
+                    <mat-icon matPrefix>home</mat-icon>
+                  </mat-form-field>
+
+                  <!-- Fila: Ciudad y Código Postal -->
+                  <div class="form-row">
+                    <mat-form-field appearance="outline" class="form-field">
+                      <mat-label>Ciudad</mat-label>
+                      <input matInput formControlName="ciudad" [readonly]="!editMode">
+                      <mat-icon matPrefix>location_city</mat-icon>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="form-field">
+                      <mat-label>Código Postal</mat-label>
+                      <input matInput formControlName="codigoPostal" [readonly]="!editMode" maxlength="5">
+                      <mat-icon matPrefix>pin</mat-icon>
+                      @if (codigoPostalControl?.touched && codigoPostalControl?.errors) {
+                        <mat-error>
+                          Código postal inválido (5 dígitos)
+                        </mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Provincia -->
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Provincia</mat-label>
+                    <input matInput formControlName="provincia" [readonly]="!editMode">
+                    <mat-icon matPrefix>map</mat-icon>
+                  </mat-form-field>
+                </form>
+              </mat-card-content>
+
+              @if (editMode) {
+                <mat-divider></mat-divider>
+                <mat-card-actions align="end">
+                  <button mat-button (click)="cancelarEdicion()" [disabled]="saving" class="cancel-btn">
+                    Cancelar
+                  </button>
+                  <button mat-raised-button color="primary" (click)="guardarCambios()" [disabled]="saving" class="save-btn">
+                    @if (saving) {
+                      <mat-spinner diameter="20"></mat-spinner>
+                    } @else {
+                      <mat-icon>save</mat-icon>
+                    }
+                    <span>{{ saving ? 'Guardando...' : 'Guardar cambios' }}</span>
+                  </button>
+                </mat-card-actions>
+              }
+            </mat-card>
+
+            <!-- Tarjeta de estadísticas mejorada -->
+            <mat-card class="stats-card glass-effect">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon class="title-icon">insights</mat-icon>
+                  Estadísticas
+                </mat-card-title>
+              </mat-card-header>
+              <mat-divider></mat-divider>
+              <mat-card-content>
+                <div class="stats-grid">
+                  <div class="stat-item">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Pedidos</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-value">0</span>
+                    <span class="stat-label">Pendientes</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-value">0€</span>
+                    <span class="stat-label">Gastado</span>
+                  </div>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </ng-template>
+      </mat-tab>
+
+      <!-- Pestaña: Seguridad -->
+      <mat-tab label="Seguridad">
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <mat-card class="form-card glass-effect">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon class="title-icon">security</mat-icon>
+                  Cambiar contraseña
+                </mat-card-title>
+                @if (!showPasswordForm) {
+                  <button mat-button color="primary" (click)="showPasswordForm = true" class="edit-button">
+                    <mat-icon>lock_reset</mat-icon>
+                    <span>Cambiar contraseña</span>
+                  </button>
+                }
+              </mat-card-header>
+
+              <mat-divider></mat-divider>
+
+              <mat-card-content>
+                @if (showPasswordForm) {
+                  <form [formGroup]="passwordForm" class="password-form">
+                    <!-- Contraseña actual -->
+                    <mat-form-field appearance="outline" class="full-width">
+                      <mat-label>Contraseña actual</mat-label>
+                      <input matInput type="password" formControlName="currentPassword">
+                      <mat-icon matPrefix>lock</mat-icon>
+                      @if (currentPasswordControl?.touched && currentPasswordControl?.errors) {
+                        <mat-error>
+                          La contraseña actual es obligatoria
+                        </mat-error>
+                      }
+                    </mat-form-field>
+
+                    <!-- Nueva contraseña -->
+                    <mat-form-field appearance="outline" class="full-width">
+                      <mat-label>Nueva contraseña</mat-label>
+                      <input matInput type="password" formControlName="newPassword">
+                      <mat-icon matPrefix>enhanced_encryption</mat-icon>
+                      @if (newPasswordControl?.touched && newPasswordControl?.errors) {
+                        <mat-error>
+                          @if (newPasswordControl?.errors?.['required']) {
+                            La nueva contraseña es obligatoria
+                          }
+                          @if (newPasswordControl?.errors?.['minlength']) {
+                            Mínimo 6 caracteres
+                          }
+                        </mat-error>
+                      }
+                    </mat-form-field>
+
+                    <!-- Confirmar contraseña -->
+                    <mat-form-field appearance="outline" class="full-width">
+                      <mat-label>Confirmar nueva contraseña</mat-label>
+                      <input matInput type="password" formControlName="confirmPassword">
+                      <mat-icon matPrefix>check_circle</mat-icon>
+                      @if (passwordMismatch) {
+                        <mat-error>
+                          Las contraseñas no coinciden
+                        </mat-error>
+                      }
+                    </mat-form-field>
+
+                    <div class="password-requirements">
+                      <p>La contraseña debe tener:</p>
+                      <ul>
+                        <li [class.valid]="isNewPasswordValidLength">
+                          <mat-icon>{{ isNewPasswordValidLength ? 'check_circle' : 'radio_button_unchecked' }}</mat-icon>
+                          Mínimo 6 caracteres
+                        </li>
+                      </ul>
+                    </div>
+                  </form>
+                } @else {
+                  <div class="info-message">
+                    <mat-icon>info</mat-icon>
+                    <p>Tu contraseña está segura. Puedes cambiarla cuando quieras.</p>
+                  </div>
+                }
+              </mat-card-content>
+
+              @if (showPasswordForm) {
+                <mat-divider></mat-divider>
+                <mat-card-actions align="end">
+                  <button mat-button (click)="showPasswordForm = false; passwordForm.reset()" [disabled]="saving" class="cancel-btn">
+                    Cancelar
+                  </button>
+                  <button mat-raised-button color="primary" (click)="cambiarPassword()" [disabled]="saving" class="save-btn">
+                    @if (saving) {
+                      <mat-spinner diameter="20"></mat-spinner>
+                    } @else {
+                      <mat-icon>save</mat-icon>
+                    }
+                    <span>{{ saving ? 'Cambiando...' : 'Cambiar contraseña' }}</span>
+                  </button>
+                </mat-card-actions>
+              }
+            </mat-card>
+          </div>
+        </ng-template>
+      </mat-tab>
+
+      <!-- Pestaña: Direcciones -->
+      <mat-tab label="Direcciones">
+        <ng-template matTabContent>
+          <div class="tab-content">
+            <mat-card class="preferences-card glass-effect">
+              <mat-card-header>
+                <mat-card-title>
+                  <mat-icon class="title-icon">location_on</mat-icon>
+                  Mis direcciones
+                </mat-card-title>
+              </mat-card-header>
+              <mat-divider></mat-divider>
+              <mat-card-content>
+                <div class="direcciones-preview">
+                  <mat-icon class="preview-icon">location_on</mat-icon>
+                  <div class="preview-text">
+                    <strong>Gestiona tus direcciones de envío</strong>
+                    <p>Añade, edita o elimina direcciones para agilizar tus compras</p>
+                  </div>
+                </div>
+                <button mat-raised-button color="primary" routerLink="/perfil/direcciones" class="full-width-btn">
+                  <mat-icon>manage_search</mat-icon>
+                  Ir a direcciones
+                </button>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</div>

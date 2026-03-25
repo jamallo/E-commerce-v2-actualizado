@@ -1,0 +1,451 @@
+<h1>Finalizar compra</h1>
+
+<!-- ESTADO 1: DIRECCIÓN -->
+ @if (step === 'direccion') {
+  <mat-card class="checkout-card">
+
+    <h2>Dirección de envío</h2>
+
+    <mat-form-field
+      appearance="outline"
+      class="full"
+    >
+      <mat-label>Dirección guardada</mat-label>
+      <mat-select
+        [ngModel]="direccionSeleccionadaId"
+        (ngModelChange)="usarDireccion($event)"
+      >
+        <mat-option [value]="null">Nueva dirección</mat-option>
+        @for (direccion of direcciones; track direccion.id) {
+          <mat-option [value]="direccion.id">
+            {{ direccion.direccion }} - {{ direccion.ciudad }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <form
+      [formGroup]="formularioEnvio"
+      class="form-grid"
+    >
+
+      <!-- Nombre -->
+      <mat-form-field
+        appearance="outline"
+        class="full"
+      >
+
+        <mat-label>Nombre</mat-label>
+
+        <input
+          matInput
+          formControlName="nombre"
+          placeholder="Ej. María"
+        >
+        @if (formularioEnvio.get('nombre')?.valid) {
+          <mat-icon matSuffix >
+            check_circle
+          </mat-icon>
+        } @else if (formularioEnvio.get('nombre')?.invalid){
+          <mat-error>
+            Mínimo 3 caracteres
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Apellidos -->
+      <mat-form-field
+        appearance="outline"
+        class="full"
+      >
+
+        <mat-label>Apellidos</mat-label>
+
+        <input
+          matInput
+          formControlName="apellidos"
+          placeholder="Ej. García López"
+        >
+        @if (formularioEnvio.get('apellidos')?.valid) {
+          <mat-icon matSuffix>
+            check_circle
+          </mat-icon>
+        } @else if (formularioEnvio.get('nombre')?.invalid){
+          <mat-error>
+            Mínimo 3 caracteres
+          </mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Tipo de vía -->
+      <mat-form-field appearance="outline">
+
+        <mat-label>Tipo de Vía</mat-label>
+
+        <mat-select formControlName="tipoVia">
+          <mat-option value="Calle">Calle</mat-option>
+          <mat-option value="Avenida">Avenida</mat-option>
+          <mat-option value="Plaza">Plaza</mat-option>
+          <mat-option value="Carretera">Carretera</mat-option>
+          <mat-option value="Camino">Camino</mat-option>
+          <mat-option value="Urbanizacion">Urbanización</mat-option>
+          <mat-option value="Poligono">Polígono</mat-option>
+          <mat-option value="Travesia">Travesía</mat-option>
+          <mat-option value="Lugar">Lugar</mat-option>
+          <mat-option value="Bulevar">Bulevar</mat-option>
+          <mat-option value="Callejon">Callejón</mat-option>
+          <mat-option value="Paseo">Paseo</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Dirección -->
+      <mat-form-field
+        appearance="outline"
+        class="full"
+      >
+
+        <mat-label>Dirección</mat-label>
+
+        <input
+          matInput
+          formControlName="direccion"
+          placeholder="Ej. Mayor 25, 3ºB"
+        >
+      </mat-form-field>
+
+      <!-- Ciudad -->
+      <mat-form-field appearance="outline">
+
+        <mat-label>Ciudad</mat-label>
+
+        <input
+          matInput
+          formControlName="ciudad"
+          placeholder="Ej. Oviedo"
+        >
+      </mat-form-field>
+
+      <!-- CP -->
+      <mat-form-field appearance="outline">
+
+        <mat-label>Código Postal</mat-label>
+
+        <input
+          matInput
+          formControlName="codigoPostal"
+          maxlength="5"
+          inputmode="numeric"
+          placeholder="Ej. 33011"
+        >
+      </mat-form-field>
+
+      <!-- Provincia -->
+      <mat-form-field
+        appearance="outline"
+        class="full"
+      >
+
+        <mat-label>Provincia</mat-label>
+
+        <input
+          type="text"
+          matInput
+          formControlName="provincia"
+          [matAutocomplete]="autoProvincia"
+        >
+        <mat-autocomplete #autoProvincia="matAutocomplete">
+          @for (provincia of provinciasFiltradas | async; track provincia) {
+            <mat-option [value]="provincia">
+              {{ provincia }}
+            </mat-option>
+          }
+        </mat-autocomplete>
+      <!--  <mat-select formControlName="provincia">
+          @for (provincia of provincias; track provincia) {
+            <mat-option [value]="provincia">
+              {{ provincia }}
+            </mat-option>
+          }
+        </mat-select> -->
+        @if (formularioEnvio.get('provincia')?.valid) {
+          <mat-icon matSuffix>
+            check_circle
+          </mat-icon>
+        }
+      </mat-form-field>
+
+      <!-- Teléfono -->
+      <mat-form-field
+        appearance="outline"
+        class="full"
+      >
+
+        <mat-label>Teléfono</mat-label>
+
+        <input
+          matInput
+          formControlName="telefono"
+          placeholder="Ej. 600 123 456"
+          inputmode="tel"
+        >
+        @if (formularioEnvio.get('telefono')?.valid) {
+          <mat-icon matTextSuffix>
+            check_circle
+          </mat-icon>
+        } @else if (formularioEnvio.get('telefono')?.invalid) {
+          <mat-error>
+            Número no válido
+          </mat-error>
+        }
+      </mat-form-field>
+
+      @if (direccionSeleccionadaId === null) {
+        <mat-checkbox formControlName="guardarDireccionNueva">
+          Guardar esta dirección para futuras compras
+        </mat-checkbox>
+      }
+
+    </form>
+
+    @if (formularioEnvio.dirty) {
+      <section class="resumen-vivo">
+
+        <h3>
+          <mat-icon>location_on</mat-icon>
+          Dirección de envío
+        </h3>
+
+        <p>
+          <strong>
+          {{ formularioEnvio.value.nombre || 'Nombre' }}
+          {{ formularioEnvio.value.apellidos || 'Apellidos' }}
+        </strong>
+      </p>
+
+      <p>
+        {{ formularioEnvio.value.tipoVia || 'Calle' }}
+        {{ formularioEnvio.value.direccion || 'Dirección' }}
+      </p>
+
+      <p>
+        {{ formularioEnvio.value.codigoPostal || 'CP' }}
+        {{ formularioEnvio.value.ciudad || 'Ciudad' }}
+        ({{ formularioEnvio.value.provincia || 'Provincia' }})
+      </p>
+
+      <p class="telefono">
+        <mat-icon>phone</mat-icon>
+        {{ formularioEnvio.value.telefono || 'Teléfono' }}
+      </p>
+    </section>
+  }
+
+  <!-- <button mat-raised-button color="primary" (click)="continuar()">
+      Continuar
+    </button> -->
+
+</mat-card>
+
+<!-- RESUMEN INFERIOR DIRECCIÓN -->
+<div class="sticky-resumen" >
+  <div class="info">
+    <span class="label">Total</span>
+    <span
+      class="precio"
+      [class.animar]="animarTotal"
+    >
+      {{ total | currency:'EUR' }}
+    </span>
+  </div>
+
+  <button
+    mat-raised-button
+    (click)="continuar()"
+    [disabled]="formularioEnvio.invalid"
+  >
+    Continuar
+  </button>
+</div>
+
+}
+
+<!-- CONFIRMACIÓN -->
+@if (step === 'confirmacion') {
+
+  <mat-card class="checkout-card confirmacion">
+
+  <h2>Confirmar pedido</h2>
+
+  <!-- DIRECCIÓN -->
+  <section class="bloque">
+    <h3>
+      <mat-icon>location_on</mat-icon>
+      Dirección de envío
+    </h3>
+
+    <p class="texto">
+      {{ direccionConfirmada.nombre }} {{ direccionConfirmada.apellidos }}<br>
+      {{ direccionConfirmada.direccion }}<br>
+      {{ direccionConfirmada.ciudad }} {{ direccionConfirmada.codigoPostal }},
+      {{ direccionConfirmada.provincia }}<br>
+      Tel: {{ direccionConfirmada.telefono }}
+    </p>
+
+    <button
+      mat-button color="primary"
+      (click)="step = 'direccion'"
+    >
+      Editar dirección
+    </button>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <!-- PRODUCTOS -->
+  <section class="bloque">
+  <h3>
+    <mat-icon>shopping_bag</mat-icon>
+    Productos
+  </h3>
+
+  @for (item of items; track item.product.id) {
+    <div class="producto producto-editable">
+
+      <div class="info">
+        <span class="nombre">{{ item.product.nombre }}</span>
+        <span class="precio">
+          {{ item.product.precio * item.quantity | currency:'EUR' }}
+        </span>
+      </div>
+
+      <div class="acciones">
+        <button
+          mat-icon-button
+          (click)="decrementar(item)"
+          [disabled]="cargando"
+        >
+          <mat-icon>remove</mat-icon>
+        </button>
+
+        <span class="cantidad">{{ item.quantity }}</span>
+
+        <button
+          mat-icon-button
+          (click)="incrementar(item)"
+          [disabled]="cargando"
+        >
+         <!--  || item.quantity >= item.product.stock -->
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <button
+          mat-icon-button
+          color="warn"
+          (click)="eliminar(item)"
+          [disabled]="cargando"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+
+    </div>
+  }
+</section>
+
+  <mat-divider></mat-divider>
+
+  <!-- TOTAL -->
+  <section class="bloque total">
+    <span>Total</span>
+    <span
+      class="precio"
+      [class.animar]="animarTotal"
+    >
+      {{ total | currency:'EUR' }}
+    </span>
+  </section>
+
+  <mat-divider></mat-divider>
+
+  <!-- PAGO -->
+  <section class="bloque pago">
+    <h3>
+      <mat-icon>credit_card</mat-icon>
+      Pago seguro
+    </h3>
+
+    <div
+      id="card-element"
+      class="stripe-box"
+    >
+    </div>
+
+    <button
+      mat-raised-button
+      color="primary"
+      class="btn-pago"
+      (click)="confirmarPago()"
+      [disabled]="cargando || cestaVacia"
+    >
+      @if (!cargando) {
+      Confirmar y pagar
+      } @else {
+        Procesando pago...
+      }
+    </button>
+
+    @if (cargando) {
+      <div class="spinner-pago">
+        <mat-spinner diameter="32"></mat-spinner>
+      </div>
+    }
+
+    @if (error) {
+      <p class="error-box">{{ error }}</p>
+    }
+  </section>
+
+</mat-card>
+
+<!-- RESUMEN INFERIOR CONFIRMACIÓN -->
+<div class="sticky-resumen pago">
+  <div class="info">
+    <span class="label">Total</span>
+    <span
+      class="precio"
+      [class.animar]="animarTotal"
+    >
+      {{ total | currency:'EUR'}}
+    </span>
+  </div>
+
+  <button
+    mat-raised-button
+    color="primary"
+    class="btn-pago"
+    (click)="confirmarPago()"
+    [disabled]="cestaVacia || cargando"
+  >
+    @if (!cargando) {
+      <ng-container>
+        <mat-icon>lock</mat-icon>
+        Pagar ahora
+      </ng-container>
+    } @else {
+      <ng-template>
+        <mat-spinner
+          diameter=" 20"
+          strokeWidth="3"
+        >
+        </mat-spinner>
+        <span class="texto-cargando">Procesando pago...</span>
+      </ng-template>
+    }
+  </button>
+</div>
+
+}
+
+
+
+

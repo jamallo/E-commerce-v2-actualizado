@@ -1,0 +1,175 @@
+<div class="pedidos-container">
+
+  <!-- Cabecera -->
+  <div class="header-section">
+    <h1>
+      <mat-icon>shopping_bag</mat-icon>
+      Mis pedidos
+    </h1>
+
+    @if (!cargando && !error && pedidos.length > 0) {
+      <div class="header-stats">
+        <span class="total-pedidos">{{ pedidos.length }} pedidos</span>
+        <button mat-icon-button (click)="recargarPedidos()" class="refresh-button">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+    }
+  </div>
+
+  <!-- Estado de carga -->
+  @if (cargando) {
+    <div class="loading-state">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Cargando tus pedidos...</p>
+    </div>
+  }
+
+  <!-- Estado de error -->
+  @if (error && !cargando) {
+    <div class="error-state">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h2>No pudimos cargar tus pedidos</h2>
+      <p>Ha ocurrido un error. Por favor, intenta de nuevo.</p>
+      <button mat-raised-button color="primary" (click)="recargarPedidos()">
+        <mat-icon>refresh</mat-icon>
+        Reintentar
+      </button>
+    </div>
+  }
+
+  <!-- Sin pedidos -->
+  @if (!cargando && !error && pedidos.length === 0) {
+    <div class="empty-state">
+      <div class="empty-icon-container">
+        <mat-icon class="empty-icon">shopping_bag</mat-icon>
+      </div>
+      <h2>No has realizado ningún pedido todavía</h2>
+      <p>¡Explora nuestros productos y haz tu primera compra!</p>
+      <button mat-raised-button color="primary" routerLink="/productos">
+        <mat-icon>store</mat-icon>
+        Ver productos
+      </button>
+    </div>
+  }
+
+  <!-- Lista de pedidos (vista móvil) -->
+  @if (!cargando && !error && pedidos.length > 0) {
+    <div class="pedidos-list-view">
+      @for (pedido of pedidos; track pedido.id) {
+        <mat-card class="pedido-card" (click)="verDetalle(pedido.id)">
+          <mat-card-content>
+            <div class="card-header">
+              <div class="pedido-id">
+                <mat-icon>receipt</mat-icon>
+                <span>Pedido #{{ pedido.id }}</span>
+              </div>
+              <div class="pedido-estado">
+                <mat-icon [class]="getEstadoClass(pedido.estado)">
+                  {{ getEstadoIcon(pedido.estado) }}
+                </mat-icon>
+                <span class="estado-texto" [class]="getEstadoClass(pedido.estado)">
+                  {{ pedido.estado }}
+                </span>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="card-body">
+              <div class="info-row">
+                <span class="info-label">Fecha:</span>
+                <span class="info-value">{{ formatearFecha(pedido.fecha) }}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Total:</span>
+                <span class="info-value total">{{ pedido.total | currency:'EUR' }}</span>
+              </div>
+            </div>
+
+            <mat-divider></mat-divider>
+
+            <div class="card-actions">
+              <button mat-button color="primary" (click)="$event.stopPropagation(); verDetalle(pedido.id)" class="action-btn">
+                <mat-icon>visibility</mat-icon>
+                Ver detalles
+              </button>
+              <button mat-button color="accent" (click)="$event.stopPropagation(); repetirPedido(pedido.id)" class="action-btn">
+                <mat-icon>repeat</mat-icon>
+                Repetir
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+
+    <!-- Tabla de pedidos (vista desktop) -->
+    <div class="pedidos-table-view">
+      <mat-card class="table-card">
+        <mat-card-content>
+          <div class="table-responsive">
+            <table mat-table [dataSource]="pedidos" class="pedidos-table">
+
+              <!-- Columna ID -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> Pedido </th>
+                <td mat-cell *matCellDef="let pedido"> #{{ pedido.id }} </td>
+              </ng-container>
+
+              <!-- Columna Fecha -->
+              <ng-container matColumnDef="fecha">
+                <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                <td mat-cell *matCellDef="let pedido">
+                  {{ formatearFecha(pedido.fecha) }}
+                </td>
+              </ng-container>
+
+              <!-- Columna Total -->
+              <ng-container matColumnDef="total">
+                <th mat-header-cell *matHeaderCellDef> Total </th>
+                <td mat-cell *matCellDef="let pedido" class="total-cell">
+                  <strong>{{ pedido.total | currency:'EUR' }}</strong>
+                </td>
+              </ng-container>
+
+              <!-- Columna Estado -->
+              <ng-container matColumnDef="estado">
+                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                <td mat-cell *matCellDef="let pedido">
+                  <div class="estado-chip" [class]="getEstadoClass(pedido.estado)">
+                    <mat-icon>{{ getEstadoIcon(pedido.estado) }}</mat-icon>
+                    <span>{{ pedido.estado }}</span>
+                  </div>
+                </td>
+              </ng-container>
+
+              <!-- Columna Acciones -->
+              <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef> Acciones </th>
+                <td mat-cell *matCellDef="let pedido">
+                  <div class="acciones-cell">
+                    <button mat-icon-button color="primary"
+                            (click)="verDetalle(pedido.id)"
+                            matTooltip="Ver detalles">
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button mat-icon-button color="accent"
+                            (click)="repetirPedido(pedido.id)"
+                            matTooltip="Repetir pedido">
+                      <mat-icon>repeat</mat-icon>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                  (click)="verDetalle(row.id)"></tr>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  }
+</div>

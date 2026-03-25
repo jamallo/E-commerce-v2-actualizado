@@ -1,0 +1,148 @@
+<div class="checkout-exito-container">
+
+  @if (loading) {
+    <div class="loading-spinner">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Cargando tu pedido...</p>
+    </div>
+  } @else if (error) {
+    <div class="error-container">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h2>Ups! Algo salió mal</h2>
+      <p>No pudimos cargar la información de tu pedido</p>
+      <button mat-raised-button color="primary" routerLink="/productos">
+        <mat-icon>store</mat-icon>
+        Volver a la tienda
+      </button>
+    </div>
+  } @else if (pedido) {
+
+    <!-- Cabecera de éxito -->
+    <div class="success-header">
+      <div class="success-icon-container">
+        <mat-icon class="success-icon">check_circle</mat-icon>
+      </div>
+      <h1>¡Gracias por tu compra!</h1>
+      <p class="pedido-confirmacion">Tu pedido se ha realizado correctamente</p>
+      <div class="pedido-numero">
+        <span>Pedido nº:</span>
+        <strong>#{{ pedido.id }}</strong>
+      </div>
+    </div>
+
+    <!-- Resumen del pedido -->
+    <div class="pedido-container">
+
+      <!-- Estado del pedido -->
+      <mat-card class="estado-card">
+        <mat-card-content>
+          <div class="estado-header">
+            <mat-icon [class]="getEstadoClass()">{{ getEstadoIcon() }}</mat-icon>
+            <div>
+              <span class="estado-label">Estado del pedido:</span>
+              <span class="estado-valor" [class]="getEstadoClass()">
+                {{ getEstadoTexto() }}
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Fecha del pedido -->
+      <div class="pedido-fecha">
+        <mat-icon>event</mat-icon>
+        <span>Realizado el {{ formatearFecha(pedido.fecha) }}</span>
+      </div>
+
+      <!-- Lista de productos -->
+      <h2 class="section-title">
+        <mat-icon>shopping_bag</mat-icon>
+        Productos ({{ pedido.items.length }})
+      </h2>
+
+      <div class="productos-lista">
+        @for (item of pedido.items; track item.nombreProducto; let i = $index) {
+          <mat-card class="producto-card">
+            <mat-card-content>
+              <div class="producto-info">
+                <div class="producto-imagen">
+                  <img [src]="'https://via.placeholder.com/100?text=Producto+' + (i+1)"
+                       [alt]="item.nombreProducto">
+                </div>
+                <div class="producto-detalles">
+                  <h3 class="producto-nombre">{{ item.nombreProducto }}</h3>
+                  <div class="producto-precio">
+                    <span class="precio-unitario">{{ item.precioUnitario | currency:'EUR' }}</span>
+                    <mat-chip class="producto-cantidad" selected>
+                      x{{ item.cantidad }}
+                    </mat-chip>
+                  </div>
+                </div>
+                <div class="producto-total">
+                  {{ item.subtotal | currency:'EUR' }}
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        }
+      </div>
+
+      <!-- Resumen de pagos -->
+      <mat-card class="resumen-card">
+        <mat-card-content>
+          <h3>Resumen del pedido</h3>
+          <mat-divider></mat-divider>
+
+          <div class="resumen-linea">
+            <span>Subtotal (sin IVA)</span>
+            <span>{{ getSubtotalSinIva() | currency:'EUR' }}</span>
+          </div>
+
+          <div class="resumen-linea">
+            <span>IVA (21%)</span>
+            <span>{{ getIva() | currency:'EUR' }}</span>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="resumen-total">
+            <span>Total (IVA incluido)</span>
+            <span class="total-valor">{{ getTotal() | currency:'EUR' }}</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Acciones -->
+      <div class="acciones-container">
+        <button mat-raised-button color="primary" routerLink="/mis-pedidos" class="btn-primary">
+          <mat-icon>list_alt</mat-icon>
+          Ver mis pedidos
+        </button>
+
+        <button mat-raised-button color="accent" (click)="repetirPedido()" class="btn-accent">
+          <mat-icon>repeat</mat-icon>
+          Repetir pedido
+        </button>
+
+        <button mat-stroked-button routerLink="/productos" class="btn-secondary">
+          <mat-icon>store</mat-icon>
+          Seguir comprando
+        </button>
+
+        <button mat-button class="btn-print" (click)="imprimirPedido()">
+          <mat-icon>print</mat-icon>
+          Imprimir
+        </button>
+      </div>
+
+      <!-- Mensaje de ayuda -->
+      <div class="ayuda-mensaje">
+        <mat-icon>help_outline</mat-icon>
+        <p>¿Necesitas ayuda con tu pedido?
+           <a routerLink="/contacto">Contacta con nosotros</a>
+        </p>
+      </div>
+
+    </div>
+  }
+</div>

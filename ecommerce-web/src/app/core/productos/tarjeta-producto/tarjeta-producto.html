@@ -1,0 +1,69 @@
+<div class="tarjeta" [class.skeleton]="skeleton">
+
+  <div class="imagen">
+    @if (!skeleton && producto) {
+      <!-- Badge de estado (solo para admin, opcional) -->
+      @if (!producto.activo) {
+        <span class="estado-badge inactivo">Inactivo</span>
+      }
+
+      <img
+        #imagenProducto
+        [src]="producto.imagenUrl || 'https://picsum.photos/400/400?random=' + producto.id"
+        [alt]="producto.nombre"
+        loading="lazy"
+        (error)="onImageError($event)"/>
+    }
+  </div>
+
+  <div class="contenido">
+    @if (!skeleton && producto) {
+      <h3>{{ producto.nombre }}</h3>
+
+      @if (producto.descripcion) {
+        <p class="descripcion">{{ producto.descripcion }}</p>
+      }
+
+      <div class="precio-boton">
+        <div class="precio">
+          {{ producto.precio | currency:'EUR' }}
+          <small>EUR</small>
+        </div>
+
+        <button
+          class="btn-comprar"
+          [class.animar]="animando"
+          [class.login-required]="!isLogged"
+          (click)="aniadirACesta()"
+          [disabled]="animando">
+          {{ textoBoton }}
+        </button>
+      </div>
+    }
+  </div>
+</div>
+
+<!-- <div class="tarjeta" [class.skeleton] = "skeleton">
+
+  <div class="imagen">
+    @if (!skeleton && producto) {
+      <img #imagenProducto [src]="producto.imagenUrl || 'http://picsum.photos/400/400'" alt="Producto"/>
+    }
+
+  </div>
+
+  <div class="contenido">
+    @if (!skeleton && producto) {
+    <h3>{{ producto.nombre }}</h3>
+
+    @if (producto.descripcion) {
+      <p class="descripcion">{{ producto.descripcion }}</p>
+    }
+
+    <!--<div class="precio">{{producto.precio }}€</div>
+
+    <button class="btn-comprar" [class.animar] = "animando" (click)="aniadirACesta()">Añadir · {{ producto.precio }}€</button>
+    }
+  </div>
+</div>
+ -->

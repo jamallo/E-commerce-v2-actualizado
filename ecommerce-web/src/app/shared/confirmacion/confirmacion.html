@@ -1,0 +1,18 @@
+@if (visible) {
+  <div class="backdrop">
+    <div class="modal">
+      <h3>{{ titulo }}</h3>
+      <p>{{ mensaje }}</p>
+
+      <div class="acciones">
+        <button (click)="cancelar()">
+          {{ textoCancelar }}
+        </button>
+
+        <button class="confirmar" (click)="confirmar()">
+          {{ textoConfirmar }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

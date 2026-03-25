@@ -1,0 +1,110 @@
+.cesta-flotante {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 900;
+  border-radius: 50%;
+  background-color: var(--verde);
+  color: var(--oro);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease; // Quitamos transform de transition general
+
+  mat-icon {
+    font-size: 28px;
+  }
+
+  &:hover {
+    background-color: var(--verde-suave);
+    color: var(--verde);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+  }
+
+  // Animación separada sin afectar posición
+  &.animar {
+    animation: bounce 0.4s ease;
+    transform-origin: center; // Aseguramos que la animación sea desde el centro
+  }
+
+  // Ajuste para móvil
+  @media (max-width: 768px) {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+// Badge - aseguramos que no afecte al posicionamiento
+.mat-badge-content {
+  background-color: var(--oro) !important;
+  color: var(--verde) !important;
+  font-weight: 700;
+  font-size: 12px;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 50%;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+
+  // Posición fija sin depender del contenido
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
+  transform: none !important; // Evitamos transformaciones
+}
+
+// Aseguramos que el botón mantenga su posición
+.mat-mdc-icon-button {
+  position: relative !important;
+  transform: none !important;
+
+  &.animar {
+    animation: bounce 0.4s ease;
+    transform-origin: center;
+  }
+}
+
+// Mini cesta
+app-mini-cesta {
+  position: fixed;
+  z-index: 950;
+  right: 24px;
+  width: 320px;
+  max-width: calc(100vw - 48px);
+  animation: slideUp 0.3s ease;
+
+  // Posición base
+  bottom: 90px;
+
+  @media (max-width: 768px) {
+    right: 16px;
+    width: calc(100vw - 32px);
+    bottom: 80px;
+  }
+}
+
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.1); // Reducimos de 1.15 a 1.1 para evitar desbordes
+  }
+  60% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,248 @@
+@use 'sass:color';
+
+.navbar-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 0 24px;
+  height: var(--navbar-height);
+  color: var(--oro) !important;
+  background: linear-gradient(270deg, #1b5e20, #2e7d32, #1b5e20, #145a32);
+  background-size: 600% 600%;
+  animation: gradientMove 12s ease infinite;
+  transition: transform 0.3s ease; // Para ocultar/mostrar
+  will-change: transform;
+
+  &.navbar-hidden {
+    transform: translateY(-100%);
+  }
+
+  @media (max-width: 768px) {
+    padding: 0 16px;
+    height: var(--navbar-height-mobile);
+  }
+}
+
+// Sección de marca
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .brand-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    color: var(--oro);
+  }
+
+  .brand-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: var(--oro);
+
+    @media (max-width: 768px) {
+      font-size: 1.2rem !important;
+    }
+  }
+}
+
+// Espaciador
+.spacer {
+  flex: 1 1 auto;
+}
+
+// Navegación
+.nav-links {
+  display: flex;
+  gap: 8px;
+  margin-right: 24px;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+
+  a {
+    border-radius: 20px;
+    padding: 0 20px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
+    }
+
+    &.active-link {
+      background-color: var(--oro);
+      color: var(--texto);
+
+      &:hover {
+        background-color: var(--oro);
+      }
+    }
+
+    mat-icon {
+      margin-right: 8px;
+      font-size: 20px;
+      height: 20px;
+      width: 20px;
+    }
+  }
+}
+
+// Iconos de acción
+.action-icons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .cart-button {
+    position: relative;
+    transition: transform 0.3s ease;
+    font-size: 14px;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    mat-icon {
+      color: var(--oro);
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .user-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--oro) 0%, #d4b748 100%);
+      color: var(--texto);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      font-weight: 600;
+      font-size: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    &:hover .user-avatar {
+      transform: scale(1.1);
+      border-color: var(--oro);
+    }
+  }
+}
+
+// Menú de usuario
+.user-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: var(--oro);
+
+  .user-avatar.large {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+    background: linear-gradient(135deg, var(--verde) 0%, #2e7d32 100%);
+    color: var(--oro);
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+
+    .user-email {
+      font-weight: 500;
+      color: var(--texto);
+      font-size: 14px;
+    }
+  }
+}
+
+// Botón de login
+.login-button {
+  border-radius: 24px;
+  padding: 8px 24px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(201, 162, 39, 0.3);
+  }
+
+  mat-icon {
+    margin-right: 8px;
+  }
+}
+
+.perfil-button {
+  background-color: var(--fondo-suave);
+  color: var(--verde);
+
+  &:hover {
+    background-color: var(--oro) !important;
+  }
+}
+
+.logout-button {
+  background-color: var(--fondo-suave);
+  color: var(--error) !important;
+
+  mat-icon {
+    color: var(--error) !important;
+  }
+
+  &:hover {
+    background-color: rgba(198, 40, 40, 0.1) !important;
+  }
+}
+
+// Badge
+.mat-badge-content {
+  background: var(--oro) !important;
+  color: var(--texto) !important;
+  font-weight: 600;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+
+.mat-mdc-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-toolbar:hover {
+  box-shadow: 0 4px 20px rgba(201, 162, 39, 0.2);
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

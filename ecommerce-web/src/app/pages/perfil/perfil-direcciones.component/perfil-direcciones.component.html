@@ -1,0 +1,44 @@
+<h2>Mis direcciones</h2>
+
+<button (click)="nueva()">➕ Nueva dirección</button>
+
+@for (direccion of direcciones; track direccion.id) {
+  <div class="direccion-card">
+    <p>{{ direccion.nombre }} {{ direccion.apellidos }}</p>
+    <p>{{ direccion.direccion }}</p>
+    <p>{{ direccion.ciudad }} {{ direccion.codigoPostal }}, {{ direccion.provincia }}</p>
+    <p>{{ direccion.telefono }}</p>
+  </div>
+
+  <button (click)="editar(direccion)">✏️ Editar</button>
+  <button (click)="eliminar(direccion.id!)">🗑️ Borrar</button>
+
+  @if (!direccion.principal) {
+    <button (click)="principal(direccion.id!)">⭐ Marcar principal</button>
+  }
+}
+
+@if (mostrarFormulario && direccionesEditando) {
+  <hr>
+  <h3>
+    {{ direccionesEditando.id ? 'Editar dirección' : 'Nueva dirección' }}
+  </h3>
+
+  <input [(ngModel)]="direccionesEditando.nombre" placeholder="Nombre">
+  <input [(ngModel)]="direccionesEditando.apellidos" placeholder="Apellidos">
+  <input [(ngModel)]="direccionesEditando.direccion" placeholder="Dirección">
+  <input [(ngModel)]="direccionesEditando.ciudad" placeholder="Ciudad">
+  <input [(ngModel)]="direccionesEditando.codigoPostal" placeholder="Código postal">
+  <input [(ngModel)]="direccionesEditando.provincia" placeholder="Provincia">
+  <input [(ngModel)]="direccionesEditando.telefono" placeholder="Teléfono">
+
+  <label>
+    <input type="checkbox" [(ngModel)]="direccionesEditando.principal">
+    Dirección principal
+  </label>
+
+  <br>
+
+  <button (click)="guardar()">💾 Guardar</button>
+  <button (click)="cancelar()">❌ Cancelar</button>
+}

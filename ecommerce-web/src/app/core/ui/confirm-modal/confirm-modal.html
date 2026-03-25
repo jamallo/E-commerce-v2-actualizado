@@ -1,0 +1,19 @@
+
+@if (visible) {
+  <div class="overlay">
+    <div class="modal">
+      <h3>{{ options.title || 'Confirmación' }}</h3>
+      <p>{{ options.message }}</p>
+
+      <div class="actions">
+        <button (click)="cancelar()">
+          {{options.cancelText || 'Cancelar' }}
+        </button>
+
+        <button class="danger" (click)="confirmar()">
+          {{ options.confirmText || 'Aceptar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,104 @@
+<div class="header">
+  <h2>Tu cesta</h2>
+  @if (items.length > 0) {
+    <span class="contador-items">{{ items.length }} {{ items.length === 1 ? 'producto' : 'productos' }}</span>
+  }
+</div>
+
+@if (items.length === 0) {
+  <div class="empty-state">
+    <span class="material-icons">shopping_cart</span>
+    <p>Tu cesta está vacía</p>
+    <button class="btn-empezar" routerLink="/productos">
+      Empezar a comprar
+    </button>
+  </div>
+} @else {
+  <div class="items-list">
+    @for (item of items; track item.product.id) {
+      <div class="item-cesta">
+        <!-- Imagen del producto -->
+        <div class="imagen">
+          <img
+            [src]="item.product.imagenUrl || 'https://picsum.photos/80/80?random=' + item.product.id"
+            [alt]="item.product.nombre"
+            loading="lazy">
+        </div>
+
+        <!-- Información -->
+        <div class="info">
+          <div class="nombre">{{ item.product.nombre }}</div>
+          <div class="precio">{{ item.product.precio | currency:'EUR' }}</div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="acciones">
+          <button
+            (click)="restar(item)"
+            [disabled]="item.quantity === 1"
+            aria-label="Disminuir cantidad">
+            -
+          </button>
+          <span>{{ item.quantity }}</span>
+          <button (click)="sumar(item)" aria-label="Aumentar cantidad">+</button>
+          <button
+            class="eliminar"
+            (click)="eliminar(item.product.id)"
+            aria-label="Eliminar producto">
+            🗑
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Resumen y acciones -->
+  <div class="resumen">
+    <div class="total-row">
+      <span>Total</span>
+      <strong>{{ total | currency:'EUR' }}</strong>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-vaciar" (click)="vaciar()">
+        Vaciar cesta
+      </button>
+      <button class="btn btn-comprar" (click)="finalizarCompra()">
+        Finalizar compra
+      </button>
+    </div>
+  </div>
+}
+
+<!-- <h2>Tu cesta</h2>
+
+@if (items.length === 0) {
+  <p>Tu cesta está vacía</p>
+} @else {
+
+  @for (item of items; track item.product.id) {
+    <div class="item-cesta">
+      <div class="info">
+        <strong>{{ item.product.nombre }}</strong>
+        <p>{{ item.product.precio }}</p>
+      </div>
+
+      <div class="acciones">
+        <button (click)="restar(item)">-</button>
+        <span>{{ item.quantity }}</span>
+        <button (click)="sumar(item)">+</button>
+        <button class="eliminar" (click)="eliminar(item.product.id)">🗑</button>
+      </div>
+    </div>
+  }
+  <hr>
+
+  <p class="total">
+    Total: <strong>{{ total }}</strong>
+  </p>
+
+  <button class="vaciar" (click)="vaciar()">Vaciar cesta</button>
+
+  <button class="comprar" (click)="finalizarCompra()">Finalizar compra</button>
+}
+ -->
